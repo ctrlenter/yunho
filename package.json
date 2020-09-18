@@ -1,0 +1,22 @@
+{
+  "name": "yunho",
+  "version": "1.0.0",
+  "description": "A discord bot to play card games with!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/p4ndaexpress/yunho.git"
+  },
+  "author": "p4ndaexpress",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/p4ndaexpress/yunho/issues"
+  },
+  "homepage": "https://github.com/p4ndaexpress/yunho#readme",
+  "dependencies": {
+    "discord.js": "^12.3.1"
+  }
+}
