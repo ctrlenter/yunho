@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/p4ndaexpress/yunho#readme",
   "dependencies": {
-    "discord.js": "^12.3.1"
+    "discord.js": "^12.3.1",
+    "enmap": "^5.7.3",
+    "mysql": "^2.18.1"
   }
 }
