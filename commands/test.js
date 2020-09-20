@@ -3,7 +3,8 @@ module.exports = {
     aliases: ['te'],
     cooldown: 3,
     requiresBotOwner: true,
-    execute(message, args){
-        message.channel.send("HEllo, World!");
+    execute(client, message, args){
+        message.channel.send(`xd ${client.cardsCache}`);
+        message.channel.send(`client.cardsCache length: ${client.cardsCache.length}`);
     }
 }

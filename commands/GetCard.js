@@ -8,8 +8,8 @@ module.exports = {
      * @param {*} message 
      * @param {Array<String>} args 
      */
-    execute(message, args){
-        if(args.lenght < 1){
+    execute(client, message, args){
+        if(args.length < 1){
             return message.reply("Usage: ;getcard <card name> [album]");
         }
         else{
@@ -17,7 +17,7 @@ module.exports = {
             let album = "";
             args.length > 1 ? album = args.slice(1).join(" ") : album = "";
             db.GetCardFromName(cardName, (res) => {
-                console.log(res[0].CardName);
+                console.log(res.length);
             });
         }
     }

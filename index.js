@@ -4,10 +4,12 @@ const fs = require('fs');
 const path = require('path')
 const Enmap = require('enmap')
 const config = require('./config.json')
+const db = require('./database/database')
 
 const cooldowns = new Discord.Collection();
 
 client.commands = new Discord.Collection();
+client.cardsCache = [];
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith(".js"));
 
 for(const file of commandFiles){
@@ -22,6 +24,24 @@ client.once('ready', () => {
     console.log(`Logged in as ${client.user.tag}, started on ${date}!`);
     client.user.setActivity('with cards', { type: 'Playing' });
     client.user.setStatus('dnd');
+    setInterval(() => {
+        db.GetAllCards((res) => {
+            cardsCache = [];
+            //console.log(`tik tok`);
+            for(let i = 0; i < res.length; i++){
+                var data = res[i];
+                var obj = {
+                    ID: data.ID,
+                    CardName: data.CardName,
+                    CardPrice: data.CardPrice,
+                    Album: data.Album,
+                    CardImage: data.CardImage
+                };
+                console.log(obj);
+                cardsCache.push(obj);
+            }
+        });
+    }, 10000);
 });
 
 client.on('message', (message) => {
@@ -59,10 +79,10 @@ client.on('message', (message) => {
 	try {
         if(command.requiresBotOwner){
             if(message.author.id == config.ownerid){
-		        command.execute(message, args);
+		        command.execute(client, message, args);
             }
         }else{
-            command.execute(message, args);
+            command.execute(client, message, args);
         }
 	} catch (error) {
 		console.error(error);
