@@ -4,7 +4,6 @@ module.exports = {
     cooldown: 3,
     requiresBotOwner: true,
     execute(client, message, args){
-        message.channel.send(`xd ${client.cardsCache}`);
-        message.channel.send(`client.cardsCache length: ${client.cardsCache.length}`);
+        message.channel.send("HEllo ,Word!");
     }
 }

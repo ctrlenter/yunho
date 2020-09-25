@@ -5,12 +5,15 @@ const path = require('path')
 const Enmap = require('enmap')
 const config = require('./config.json')
 const db = require('./database/database')
+const streamings = require('./streamings.json')
 
 const cooldowns = new Discord.Collection();
 
 client.commands = new Discord.Collection();
 client.cardsCache = [];
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith(".js"));
+
+
 
 for(const file of commandFiles){
     const command = require(`./commands/${file}`);
@@ -19,11 +22,15 @@ for(const file of commandFiles){
 
 client.on('error', console.error);
 
-client.once('ready', () => {
+client.on('ready', () => {
     let date = new Date();
+    db.connect();
     console.log(`Logged in as ${client.user.tag}, started on ${date}!`);
-    client.user.setActivity('with cards', { type: 'Playing' });
-    client.user.setStatus('dnd');
+    client.user.setActivity({
+        name: "Thanxx",
+        type: "STREAMING",
+        url: "https://www.youtube.com/watch?v=3muUmZBi4F4"
+    });
     setInterval(() => {
         db.GetAllCards((res) => {
             cardsCache = [];
@@ -76,7 +83,12 @@ client.on('message', (message) => {
     timestamps.set(message.author.id,now);
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
+    db.ContainsUser(message.author.id, res => {
+        if(!res) db.AddUser(message.author.id);
+    })
+
 	try {
+
         if(command.requiresBotOwner){
             if(message.author.id == config.ownerid){
 		        command.execute(client, message, args);
@@ -89,5 +101,14 @@ client.on('message', (message) => {
 		message.reply('there was an error trying to execute that command!');
 	}
 });
+
+setInterval(() => {
+    let stream = streamings[Math.floor(Math.random() * streamings.length)];
+    client.user.setActivity({
+        name: stream.name,
+        type: "STREAMING",
+        url: stream.url
+    })
+}, 30000);
 
 client.login(config.token);
