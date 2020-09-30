@@ -6,14 +6,13 @@ const Enmap = require('enmap')
 const config = require('./config.json')
 const db = require('./database/database')
 const streamings = require('./streamings.json')
+const CardsCache = require('./Caches');
 
 const cooldowns = new Discord.Collection();
 
 client.commands = new Discord.Collection();
-client.cardsCache = [];
+
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith(".js"));
-
-
 
 for(const file of commandFiles){
     const command = require(`./commands/${file}`);
@@ -31,24 +30,7 @@ client.on('ready', () => {
         type: "STREAMING",
         url: "https://www.youtube.com/watch?v=3muUmZBi4F4"
     });
-    setInterval(() => {
-        db.GetAllCards((res) => {
-            cardsCache = [];
-            //console.log(`tik tok`);
-            for(let i = 0; i < res.length; i++){
-                var data = res[i];
-                var obj = {
-                    ID: data.ID,
-                    CardName: data.CardName,
-                    CardPrice: data.CardPrice,
-                    Album: data.Album,
-                    CardImage: data.CardImage
-                };
-                console.log(obj);
-                cardsCache.push(obj);
-            }
-        });
-    }, 10000);
+    client.cache = new CardsCache();
 });
 
 client.on('message', (message) => {
@@ -98,7 +80,7 @@ client.on('message', (message) => {
         }
 	} catch (error) {
 		console.error(error);
-		message.reply('there was an error trying to execute that command!');
+		//message.reply('there was an error trying to execute that command!');
 	}
 });
 
@@ -110,5 +92,25 @@ setInterval(() => {
         url: stream.url
     })
 }, 30000);
+
+/*setInterval(() => {
+    db.GetAllCards((res) => {
+        cardsCache = [];
+        //console.log(`tik tok`);
+        for(let i = 0; i < res.length; i++){
+            var data = res[i];
+            var obj = {
+                ID: data.ID,
+                CardName: data.CardName,
+                CardPrice: data.CardPrice,
+                Album: data.Album,
+                CardImage: data.CardImage
+            };
+            console.log(obj);
+            cardsCache.push(obj);
+        }
+    });
+}, 600000);*/
+
 
 client.login(config.token);

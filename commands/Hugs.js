@@ -14,25 +14,26 @@ module.exports = {
      */
     execute(client ,message, args){
         let user = message.author;
-        db.ContainsUser(user, exists => {
+        db.ContainsUser(user.id, exists => {
             if(exists){
                 db.GetUserData(user.id, res => {    
                     let desc = `${user.username} has been hugged ${res.Hugs} times.`;
                     if(res.LastHugger != "None")
                         desc += `\nThey were last hugged by ${res.LastHugger}`;
             
-                    let embed = new Discord.MessageEmbed()
-                        .setColor("#ff00ff")
-                        .setTitle(`${user.username}'s hugs`)
-                        .setFooter("Made by P4nda With love <3")
-                        .setDescription(desc);
-            
-                    message.channel.send({embed: embed});
+                    let embed = new Discord.MessageEmbed();
+                    embed.setColor("#ff00ff");
+                    embed.setTitle(`${user.username}'s hugs`);
+                    embed.setFooter("Made by P4nda With love <3");
+                    embed.setDescription(desc);
+
+                    
+                    message.channel.send("test", {embed: embed});
             
                 });
             }else{
                 message.channel.send(`Could not find ${user}.\nAdding to the database!`);
-                db.AddUser(user);
+                db.AddUser(user.id);
             }
             
         });

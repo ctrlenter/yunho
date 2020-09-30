@@ -12,14 +12,15 @@ module.exports = {
      */
     execute(client, message, args){
         if(args.length < 5){
-            return message.reply("Need more parameters.\nUsage: ;addcard <cardname> <cardprice> <rarity> <album> <cardimage>");
+            return message.reply("Need more parameters.\nUsage: ;addcard <cardname> <cardprice> <image> <type> <album>");
         }
         else{
             let name = args[0];
             let price = args[1];
             let image = args[2];
-            let album = args.slice(3).join(" ");
-            db.AddCard(name,price,album,image, (res) => {
+            let type = args[3];
+            let album = args.slice(4).join(" ");
+            db.AddCard(name, price, album, image, type, (res) => {
                 console.log(`Added card\nRes: ${res}`);
                 message.reply(`Added card ${name}`);
             });

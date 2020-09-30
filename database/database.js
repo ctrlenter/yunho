@@ -1,9 +1,8 @@
 const mysql = require('mysql');
 var config = require('../config.json')
+const UserData = require('../models/UserData');
 
-//TODO: Make this a class
-
-var con = mysql.createConnection({
+let con = mysql.createConnection({
     host: config.server,
     user: config.user,
     password: config.password,
@@ -11,12 +10,10 @@ var con = mysql.createConnection({
 });
 
 module.exports.connect = () => {
-
     con.connect((err) => {
         if(err) throw err;
         console.log("Connected to the database");
     });
-
 }
 
 module.exports.GetUserData = (userid, cb) => {
@@ -24,7 +21,9 @@ module.exports.GetUserData = (userid, cb) => {
         if(res){
             con.query(`SELECT * FROM Users WHERE \`DiscordId\` = ${userid}`, (err, res, fields) => {
                 if(err) throw err;
-                if(cb) cb(res[0]);
+                let first = res[0];
+                let user = new UserData(first.DiscordID, first.Watermelon, first.Level, first.Exp, first.Hugs, first.LastHugger);
+                if(cb) cb(user);
             })
         }else{
             this.AddUser(userid);
@@ -66,7 +65,14 @@ module.exports.AddHug = (userId, lastHugger ,cb) => {
     })
 }
 
-module.exports.GenerateCard = (userId, cardName, cardAlbum, grade ,cb) => {
+module.exports.ModifyWatermelons = (userId, amount, cb) => {
+    con.query(`UPDATE \`users\` SET \`Watermelon\` = \`Watermelon\` + ${amount} WHERE \`DiscordId\` = ${userId}}`, (err,res,fields) => {
+        if(err) throw err;
+        if(cb) cb(res);
+    });
+}
+
+module.exports.AddCardToUser = (userId, cardName, cardAlbum, grade ,cb) => {
     //Make "CardName" contain the name of the idol and the album like this: "Wooyoung All To One"
     con.query(`INSERT INTO usercards(OwnerId, CardName, Grade) 
             VALUES('${userId}' , '${cardName}' , '${cardAlbum}' , '${grade}')`, (err, res, fields) => {
@@ -75,9 +81,9 @@ module.exports.GenerateCard = (userId, cardName, cardAlbum, grade ,cb) => {
             });
 }
 
-module.exports.AddCard = (cardName, cardPrice, album, cardImage, cb) => {
-    con.query(`INSERT INTO Cards(CardName, CardPrice,  Album, CardImage)
-        VALUES('${cardName}', '${Number(cardPrice)}', '${album}', '${cardImage}')`,(err, res, fields) =>{
+module.exports.AddCard = (cardName, cardPrice, album, cardImage, type, cb) => {
+    con.query(`INSERT INTO Cards(CardName, CardPrice,  Album, CardImage, Type)
+        VALUES('${cardName}', '${Number(cardPrice)}', '${album}', '${cardImage}', '${type}')`,(err, res, fields) =>{
             if(err)throw err;
             if(cb) cb(res);
         })
