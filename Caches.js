@@ -13,12 +13,20 @@ class Cache{
                     ID: data.ID,
                     CardName: data.CardName,
                     CardPrice: data.CardPrice,
-                    Album: data.Album,
-                    CardImage: data.CardImage
+                    CardImage: data.CardImage,
+                    Type: data.Type
                 };
                 this.cards.push(obj);
             }
         });
+        db.GetServerSettings(res => {
+
+        });
+    }
+
+    getCard(){
+        return this.cards.find(r => r.CardName == "Hongjoong");
+        //return this.cards[Math.floor(Math.random() * this.cards.length)];
     }
 
     getCache(){

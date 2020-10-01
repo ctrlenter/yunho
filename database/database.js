@@ -31,6 +31,10 @@ module.exports.GetUserData = (userid, cb) => {
     })
 }
 
+module.exports.GetServerSettings = () => {
+    //TODO: Implement
+}
+
 module.exports.AddUser = (userId, cb) => {
     con.query(`INSERT INTO Users(DiscordID, Watermelon, Level, Exp, Hugs, LastHugger) VALUES (${userId}, 100, 1, 0, 0, 'none')`, (err, res, fields) => {
         if(err) throw err;
@@ -81,9 +85,9 @@ module.exports.AddCardToUser = (userId, cardName, cardAlbum, grade ,cb) => {
             });
 }
 
-module.exports.AddCard = (cardName, cardPrice, album, cardImage, type, cb) => {
-    con.query(`INSERT INTO Cards(CardName, CardPrice,  Album, CardImage, Type)
-        VALUES('${cardName}', '${Number(cardPrice)}', '${album}', '${cardImage}', '${type}')`,(err, res, fields) =>{
+module.exports.AddCard = (cardName, cardPrice, cardImage, type, cb) => {
+    con.query(`INSERT INTO Cards(CardName, CardPrice, CardImage, Type)
+        VALUES('${cardName}', '${Number(cardPrice)}', '${cardImage}', '${type}')`,(err, res, fields) =>{
             if(err)throw err;
             if(cb) cb(res);
         })

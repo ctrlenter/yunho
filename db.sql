@@ -3,6 +3,7 @@ CREATE TABLE `Cards` (
 	`CardName` TEXT NOT NULL,
 	`CardPrice` INT NOT NULL,
 	`CardImage` INT NOT NULL,
+	`Type` TEXT NOT NULL,
 	PRIMARY KEY(`ID`)
 );
 
