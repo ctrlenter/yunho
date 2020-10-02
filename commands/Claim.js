@@ -15,25 +15,31 @@ module.exports = {
      */
     execute(client ,message, args){
         let length = args.length;
+        let card;
         if(length == 0){
             // For now, just generate a random card. We don't really need to care atm
             let card = client.cache.getCard();
             console.log(card);
-            
-            let emved = {
-                description: `Congratulations! You claimed ${card.CardName}! :tada:\nIt costed you 50 \`🍉\` watermelons`,
-                image: {
-                    url: "https://raw.githubusercontent.com/p4ndaexpress/yunho/master/cards/ateez/one_to_all/san.jpg"
-                },
-                footer: {
-                    text: "Made with love by P4nda"
-                }
-            }
-            message.channel.send({embed: emved});
+
         } 
         else if(length == 1){
             let type = args[0].toLowerCase();
-            
+            if(type === "boy" || type === "boygroup"){
+                //generate boy card
+                card = client.cache.getBoyCard();
+            }
+            else if(type === "girl" || type === "girlgroup"){
+                //generate girl card
+                card = client.cache.getGirlCard();
+            }
         }
+
+                    
+        let embed = new Discord.MessageEmbed();
+        embed.setDescription(`Congratulations! You claimed ${card.CardName}! :tada:\nIt costed you 50 \`🍉\` watermelons`)
+        embed.setImage(card.CardImage);
+        embed.setFooter("Made with love by P4nda")
+
+        message.channel.send({embed: embed});
     }
 }

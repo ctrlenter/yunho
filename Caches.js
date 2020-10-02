@@ -20,13 +20,24 @@ class Cache{
             }
         });
         db.GetServerSettings(res => {
+            //TODO: Implement caching of server settings
 
         });
     }
 
+    getBoyCard(){
+        let res = this.cards.filter(r => r.Type === "Boy");
+        return res[Math.floor(Math.random() * res.length)];
+    }
+
+    getGirlCard(){
+        let res = this.cards.filter(r => r.Type === "Girl");
+        return res[Math.floor(Math.random() * res.length)];
+    }
+
     getCard(){
-        return this.cards.find(r => r.CardName == "Hongjoong");
-        //return this.cards[Math.floor(Math.random() * this.cards.length)];
+        //return this.cards.find(r => r.CardName == "Hongjoong");
+        return this.cards[Math.floor(Math.random() * this.cards.length)];
     }
 
     getCache(){
